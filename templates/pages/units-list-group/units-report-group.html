@@ -1,4 +1,8 @@
 {% extends "layout.html" %}
+{% block css %}
+<link rel="stylesheet" href="//cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+{% endblock %}
+
 {% block content %}
     <div class="container">
         <h2>REPORTE DE UNIDADES</h2>
@@ -11,5 +15,15 @@
                 {% endfor %}
             </div>
         </div>
+        <div class="row">
+            <div class="col-6">
+                {% include "pages/units-list-group/components/table.html" %}
+            </div>
+        </div>
     </div>
+{% endblock %}
+
+{% block js %}
+    <script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js" defer></script>
+    <script src="/static/js/tableReport.js" defer></script>
 {% endblock %}

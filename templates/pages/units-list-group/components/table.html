@@ -1,0 +1,91 @@
+<table id="report_table" class="table table-striped" data-page-length='25'>
+    <thead>
+        <tr>
+            <th>unit_id</th>
+            <th>title</th>
+            <th>overall</th>
+            <th>effective_speed</th>
+            <th>excessive_idling</th>
+            <th>cruise_control</th>
+            <th>coasting</th>
+            <th>harsh_braking</th>
+            <th>harsh_acceleration</th>
+            <th>green_rpm</th>
+            <th>speeding</th>
+            <th>distance_gps</th>
+            <th>distance_can</th>
+            <th>driving_duration</th>
+            <th>excessive_idling_pto_duration</th>
+            <th>fuel_avg_consumption</th>
+            <th>fuel_avg_consumption_measure</th>
+            <th>fuel_avg_consumption_by_norm</th>
+            <th>fuel_avg_consumption_ratio</th>
+            <th>fuel_consumption</th>
+            <th>fuel_consumption_can</th>
+            <th>excessive_idling_consumption_can</th>
+            <th>pto_idle_fuel_consumption_can</th>
+            <th>stop_count</th>
+            <th>stop_duration</th>
+            <th>avg_speed</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for report in units_report %}
+            <tr>
+                <td>{{ report.unit_id }}</td>
+                <td>{{ report.title }}</td>
+                <td>
+                    <strong>Grade</strong> {{ report.overall['grade'] }} 
+                    <br>
+                    <strong>Score</strong> {{ report.overall['score'] }}</td>
+                <td>
+                    <strong>Grade</strong> {{ report.effective_speed['grade'] }}
+                    <br>
+                    <strong>Score</strong> {{ report.effective_speed['score'] }}
+                    <br>
+                    <strong>Distance</strong> {{ report.effective_speed["distance"] }}
+                    <br>
+                    <strong>Duration</strong> {{ report.effective_speed["duration"] }}
+                </td>
+                <td>
+                    <strong>Grade</strong> {{ report.excessive_idling["grade"] }}
+                    <br>
+                    <strong>Score</strong> {{ report.excessive_idling["score"] }}
+                    <br>
+                    <strong>Duration</strong> {{ report.excessive_idling["duration"] }}
+                </td>
+                <td>
+                    <strong>Grade</strong> {{ report.cruise_control["grade"] }}
+                    <br>
+                    <strong>Score</strong> {{ report.cruise_control["score"] }}
+                    <br>
+                    <strong>Distance</strong> {{ report.cruise_control["distance"] }}
+                    <br>
+                    <strong>Duration</strong> {{ report.cruise_control["duration"] }}
+                </td>
+                <td>
+                    <strong>Grade</strong> {{ report.coasting["grade"] }}
+                    <br>
+                    <strong>Score</strong> {{ report.coasting["score"] }}
+                    <br>
+                    <strong>distance</strong> {{ report.coasting["distance"] }}
+                    <br>
+                    <strong>Duration</strong> {{ report.coasting["duration"] }}
+                </td>
+                <td>
+                    <strong>Grade</strong> {{ report.harsh_braking["grade"] }}
+                    <br>
+                    <strong>Score</strong> {{ report.harsh_braking["score"] }}
+                    <br>
+                    <strong>Count</strong> {{ report.harsh_braking["count"] }}
+                </td>
+                <td>
+                    <strong>Grade</strong> {{ report.harsh_acceleration["grade"] }}
+                    <br>
+                    <strong>Score</strong> {{ report.harsh_acceleration["score"] }}
+                    <br>
+                    <strong>Count</strong> {{ report.harsh_acceleration["count"] }}
+                </td>
+            </tr>
+        {% endfor %}
+</table>
