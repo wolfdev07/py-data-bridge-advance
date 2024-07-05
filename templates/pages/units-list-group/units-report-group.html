@@ -1,0 +1,15 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <h2>REPORTE DE UNIDADES</h2>
+        <p>Periodo: {{ period }}</p>
+        <div class="row">
+            <div class="col-6">
+                <p>{{ id_group }}</p>
+                {% for report in units_report %}
+                    <p>{{ report }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

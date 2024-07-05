@@ -1,0 +1,28 @@
+{% extends "layout.html" %}
+{% block content %}
+    <div class="container">
+        <h2 class="mt-2">Inicio</h2>
+        <p>Comportamiento del Conductor</p>
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <form class="form-group card" action="/units-report-group" method="post">
+                    <div class="card-header">
+                        <h5>Selecionar Grupo</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <select name="id_group" class="form-control" id="group">
+                                {% for group in groups %}
+                                    <option value="{{ group.id }}">{{ group.name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="card-footer text-end">
+                        <button type="submit" class="btn btn-primary">Consultar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
