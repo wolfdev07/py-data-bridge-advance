@@ -1,22 +1,23 @@
 {% extends "layout.html" %}
 {% block css %}
-<link rel="stylesheet" href="//cdn.datatables.net/2.0.8/css/dataTables.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/2.0.8/css/dataTables.dataTables.css">
 {% endblock %}
 
 {% block content %}
     <div class="container">
-        <h2>REPORTE DE UNIDADES</h2>
-        <p>Periodo: {{ period }}</p>
-        <div class="row">
+        <div class="row mt-4">
             <div class="col-6">
-                <p>{{ id_group }}</p>
-                {% for report in units_report %}
-                    <p>{{ report }}</p>
-                {% endfor %}
+                <h2>REPORTE DE UNIDADES</h2>
+            </div>
+            <div class="col-6 text-end">
+                <a href="{{ url_for('index') }}" class="btn btn-secondary">Regresar
+                    <i class="fas fa-arrow-left"></i>
+                </a>
             </div>
         </div>
+        <p>Periodo: {{ period }}</p>
         <div class="row">
-            <div class="col-12">
+            <div class="col">
                 {% include "pages/units-list-group/components/table.html" %}
             </div>
         </div>
@@ -24,6 +25,10 @@
 {% endblock %}
 
 {% block js %}
-<script src="//cdn.datatables.net/2.0.8/js/dataTables.min.js" defer></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js" 
+integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
+crossorigin="anonymous"></script>
+
+<script src="https://cdn.datatables.net/2.0.8/js/dataTables.js" defer></script>
 <script src="/static/js/units-list-group/tableReport.js" defer></script>
 {% endblock %}
