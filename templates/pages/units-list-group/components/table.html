@@ -10,6 +10,7 @@
             <th>coasting</th>
             <th>harsh_braking</th>
             <th>harsh_acceleration</th>
+            <th>harsh_cornering</th>
             <th>green_rpm</th>
             <th>speeding</th>
             <th>distance_gps</th>
@@ -85,6 +86,72 @@
                     <strong>Score</strong> {{ report.harsh_acceleration["score"] }}
                     <br>
                     <strong>Count</strong> {{ report.harsh_acceleration["count"] }}
+                </td>
+                <td>
+                    <strong>Grade</strong> {{ report.harsh_cornering["grade"] }}
+                    <br>
+                    <strong>Score</strong> {{ report.harsh_cornering["score"] }}
+                    <br>
+                    <strong>Count</strong> {{ report.harsh_cornering["count"] }}
+                </td>
+                <td>
+                    <strong>Grade</strong> {{ report.green_rpm["grade"] }}
+                    <br>
+                    <strong>Score</strong> {{ report.green_rpm["score"] }}
+                    <br>
+                    <strong>Distance</strong> {{ report.green_rpm["distance"] }}
+                </td>
+                <td>
+                    <strong>Grade</strong> {{ report.speeding["grade"] }}
+                    <br>
+                    <strong>Score</strong> {{ report.speeding["score"] }}
+                    <br>
+                    <strong>Distance</strong> {{ report.speeding["distance"] }}
+                </td>
+                <td>
+                    {{ report.distance_gps }}
+                </td>
+                <td>
+                    {{ report.distance_can }}
+                </td>
+                <td>
+                    {{ report.driving_duration }}
+                </td>
+                <td>
+                    {{ report.excessive_idling_pto_duration }} 
+                </td>
+                <td>
+                    {{ report.fuel_avg_consumption }}
+                </td>
+                <td>
+                    {{ report.fuel_avg_consumption_measure }}
+                </td>
+                <td>
+                    {{ report.fuel_avg_consumption_by_norm }}
+                </td>
+                <td>
+                    {{ report.fuel_avg_consumption_ratio }}
+                </td>
+                <td>
+                    {{ report.fuel_consumption }}
+                </td>
+                <td>
+                    {{ report.fuel_consumption_can }}
+                </td>
+                <td>
+                    {{ report.excessive_idling_consumption_can }}
+                </td>
+                <td>
+                    {{ report.pto_idle_fuel_consumption_can }}
+                </td>
+                <td>
+                    {{ report.stop_count }}
+                </td>
+                <td>
+                    {{ report.stop_duration }}
+                </td>
+                <td>
+                    {{ report.avg_speed }}
                 </td>
             </tr>
         {% endfor %}
