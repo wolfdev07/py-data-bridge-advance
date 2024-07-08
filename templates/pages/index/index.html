@@ -1,28 +1,34 @@
 {% extends "layout.html" %}
 {% block content %}
     <div class="container">
-        <h2 class="mt-2">Inicio</h2>
-        <p>Comportamiento del Conductor</p>
-        <div class="row justify-content-center">
-            <div class="col-6">
-                <form class="form-group card" action="/units-report-group" method="post">
+        <h2 class="mt-2">Bienvenido</h2>
+        <div class="row justify-content-center mt-5">
+            <div class="col">
+                <form class="form-group card" id="form-select-group">
                     <div class="card-header">
-                        <h5>Selecionar Grupo</h5>
+                        <h5>Selecciona un Grupo</h5>
                     </div>
                     <div class="card-body">
+                        <div class="card-title">
+                            <p>Total de elementos {{ groups|length }}: </p>
+                        </div>
                         <div class="form-group">
                             <select name="id_group" class="form-control" id="group">
                                 {% for group in groups %}
-                                    <option value="{{ group.id }}">{{ group.name }}</option>
+                                    <option id="selection-option" value="{{ group.id }}">{{ group.name }}</option>
                                 {% endfor %}
                             </select>
                         </div>
                     </div>
                     <div class="card-footer text-end">
-                        <button type="submit" class="btn btn-primary">Consultar</button>
+                        <a class="btn btn-primary" id="button-action">Consultar</a>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 {% endblock %}
+{% block js %}
+    <script src="static/js/load_animation/loadSection.js"></script>
+    <script src="static/js/index/loadGroup.js"></script>
+{% endblock  %}

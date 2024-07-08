@@ -16,7 +16,7 @@
             </div>
         </div>
         <p>Periodo: {{ period }}</p>
-        <div class="row">
+        <div class="row mt-5">
             <div class="col">
                 {% include "pages/units-list-group/components/table.html" %}
             </div>
@@ -25,10 +25,7 @@
 {% endblock %}
 
 {% block js %}
-<script src="https://code.jquery.com/jquery-3.7.1.js" 
-integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="
-crossorigin="anonymous"></script>
-
+<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4="crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js" defer></script>
 <script src="/static/js/units-list-group/tableReport.js" defer></script>
 {% endblock %}
