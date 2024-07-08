@@ -8,7 +8,6 @@ buttonAction.addEventListener("click", ()=>{
     // GET THE SELECTED VALUE
     const selectedValue = selectElement.value;
     // VERIFICAR LA SELECCION
-    console.info(selectedValue);
     LoadingPage();
     window.location.href="/units-report-group?id_group="+selectedValue;
 });
