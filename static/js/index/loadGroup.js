@@ -2,7 +2,6 @@
 const formSelectGroup = document.getElementById("form-select-group");
 const buttonAction = document.getElementById("button-action");
 
-
 buttonAction.addEventListener("click", ()=>{
     // LEER ELEMENTO SELECCIONADO
     const selectElement =  formSelectGroup.querySelector("select");

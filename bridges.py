@@ -64,8 +64,11 @@ def units_behaviour_report(base_url=MAPON_BASE_URL, key=MAPON_API_KEY, date_from
     if response.status_code==200:
         # CONVERTIR LA RESPUESTA EN JSON
         data = response.json()["data"] # DE RESPONSE SOLO SE NECESITA LA LIST DE ARRAYS
-        print(data)
-        return data
+        context = { "data": data,
+                    "date_from": date_from,
+                    "date_till": date_till,
+                    "group_id": group_id}
+        return context
     else:
         print("Error:", response.status_code)
         return None
