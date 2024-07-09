@@ -13,7 +13,7 @@
                             <p>Total de elementos {{ groups|length }}: </p>
                         </div>
                         <div class="form-group">
-                            <select name="id_group" class="form-control" id="group">
+                            <select name="id_group" class="form-select" aria-label="Default select example" id="group">
                                 {% for group in groups %}
                                     <option id="selection-option" value="{{ group.id }}">{{ group.name }}</option>
                                 {% endfor %}
