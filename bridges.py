@@ -5,6 +5,8 @@ PUENTES DE CONSUMO DE MAPON V1
 """
 import requests
 import json
+import asyncio
+import httpx
 from datetime import date, timedelta
 from config import MAPON_BASE_URL, MAPON_API_KEY, CRM_LOGIN_URL, COOKIES_SESSION_CRM
 from config import save_crm_cookies
@@ -82,33 +84,63 @@ def units_behaviour_report(base_url=MAPON_BASE_URL, key=MAPON_API_KEY, date_from
         return None
 
 
-def scrap_crm(url_target):
-    # INICIAR ESTACIA DE SESION
-    sesion = requests.Session()
-    # LOGIN SI NO HAY EN ENV, SETEAR LAS COKIES
-    if not COOKIES_SESSION_CRM:
-        get_cookies = login_crm(CRM_LOGIN_URL)
-        save_crm_cookies(get_cookies)
-    # CARGAR LAS COOKIES
-    cookies = json.loads(COOKIES_SESSION_CRM)
-    # SETEAR LAS COOKIES EN LA SESSION
-    for cookie in cookies:
-        sesion.cookies.set(cookie['name'], cookie['value'])
-
-    # EJECUTA LA PETICION Y ALMACENA LA RESPUESTA
-    response = sesion.get(url_target)
-
-    if response.status_code==200:
-        # CONVERTIR LA RESPUESTA EN HTML
-        doc_html = BeautifulSoup(response.content, 'html.parser')
+async def get_table_quicklink(url_target):
+    # INICIAR SESIÓN
+    async with httpx.AsyncClient() as session:
+        # LOGIN SI NO HAY EN ENV, SETEAR LAS COOKIES
+        if not COOKIES_SESSION_CRM:
+            get_cookies = login_crm(CRM_LOGIN_URL)
+            save_crm_cookies(get_cookies)
+            cookies = get_cookies
+        else:
+            # CARGAR LAS COOKIES
+            cookies = json.loads(COOKIES_SESSION_CRM)
+            
+        # SETEAR LAS COOKIES EN LA SESIÓN
+        for cookie in cookies:
+            session.cookies.set(cookie['name'], cookie['value'], domain=cookie['domain'])
         
-        print(doc_html.prettify())
-    else:
-        print("Error:", response.status_code)
-        return None
+        try:
+            # REALIZAR LA PETICIÓN Y ALMACENAR EL RESULTADO
+            response = await session.get(url_target)
+            
+            # VERIFICAR SI LA SOLICITUD FUE EXITOSA
+            if response.status_code == 200:
+                # OBTENER EL CONTENIDO HTML
+                doc_html = BeautifulSoup(response.content, 'html.parser')
+                
+                # ESPERAR HASTA QUE EXISTA LA ETIQUETA <table>
+                await asyncio.wait_for(wait_for_table(doc_html), timeout=120)
+                
+                # PROCESAR LA TABLA
+                target_tag = doc_html.find('table')
+                if target_tag:
+                    for tag in target_tag.find_all('tr'):
+                        print(tag.text)
+                else:
+                    print("No se encontró la etiqueta <table> en el contenido HTML")
+                
+                return response.content
+            else:
+                print(f"Error: {response.status_code} - {response.reason}")
+                return None
+        except asyncio.TimeoutError:
+            print("Tiempo de espera agotado al esperar la etiqueta <table>")
+            return None
+        except Exception as e:
+            print(f"Error durante la solicitud HTTP: {e}")
+            return None
 
+# ESPERAR HASTA QUE EXISTA LA ETIQUETA <table>
+async def wait_for_table(doc_html):
+    while not doc_html.find('table'):
+        await asyncio.sleep(1)
 
 # EJECUTAR FUNCIONES
-scrap_crm("https://mapon.com/partner/incoming_data/?box_model=QUECLINK&unique_id=862524060583388")
+async def scrap_crm_async(url_target):
+    await get_table_quicklink(url_target)
+
+asyncio.run(scrap_crm_async("https://mapon.com/partner/incoming_data/?box_model=QUECLINK&unique_id=862524060583388"))
+#scrap_crm("https://mapon.com/partner/incoming_data/?box_model=QUECLINK&unique_id=862524060583388")
 # EJEMPLOS DE USO
 #units_behaviour_report(base_url=MAPON_BASE_URL, key=MAPON_API_KEY, group_id=69153)
