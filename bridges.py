@@ -4,9 +4,12 @@ PUENTES DE CONSUMO DE MAPON V1
 
 """
 import requests
+import json
 from datetime import date, timedelta
-from config import MAPON_BASE_URL, MAPON_API_KEY
+from config import MAPON_BASE_URL, MAPON_API_KEY, CRM_LOGIN_URL, COOKIES_SESSION_CRM
+from config import save_crm_cookies
 from bs4 import BeautifulSoup
+from utils import login_crm
 
 
 
@@ -80,15 +83,32 @@ def units_behaviour_report(base_url=MAPON_BASE_URL, key=MAPON_API_KEY, date_from
 
 
 def scrap_crm(url_target):
+    # INICIAR ESTACIA DE SESION
+    sesion = requests.Session()
+    # LOGIN SI NO HAY EN ENV, SETEAR LAS COKIES
+    if not COOKIES_SESSION_CRM:
+        get_cookies = login_crm(CRM_LOGIN_URL)
+        save_crm_cookies(get_cookies)
+    # CARGAR LAS COOKIES
+    cookies = json.loads(COOKIES_SESSION_CRM)
+    # SETEAR LAS COOKIES EN LA SESSION
+    for cookie in cookies:
+        sesion.cookies.set(cookie['name'], cookie['value'])
 
-    r = requests.get(url_target)
-    soup = BeautifulSoup(r.content, 'html.parser')
-    table = soup.find_all('table', { 'id': 'example' })
-    rows = table[0].find_all('tr')
+    # EJECUTA LA PETICION Y ALMACENA LA RESPUESTA
+    response = sesion.get(url_target)
 
-    print(rows)
+    if response.status_code==200:
+        # CONVERTIR LA RESPUESTA EN HTML
+        doc_html = BeautifulSoup(response.content, 'html.parser')
+        
+        print(doc_html.prettify())
+    else:
+        print("Error:", response.status_code)
+        return None
 
 
-scrap_crm("https://datatables.net/")
+# EJECUTAR FUNCIONES
+scrap_crm("https://mapon.com/partner/incoming_data/?box_model=QUECLINK&unique_id=862524060583388")
 # EJEMPLOS DE USO
 #units_behaviour_report(base_url=MAPON_BASE_URL, key=MAPON_API_KEY, group_id=69153)
