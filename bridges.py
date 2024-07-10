@@ -6,6 +6,8 @@ PUENTES DE CONSUMO DE MAPON V1
 import requests
 from datetime import date, timedelta
 from config import MAPON_BASE_URL, MAPON_API_KEY
+from bs4 import BeautifulSoup
+
 
 
 # LISTAR GRUPOS EMPRESARIALES.
@@ -76,5 +78,17 @@ def units_behaviour_report(base_url=MAPON_BASE_URL, key=MAPON_API_KEY, date_from
         print("Error:", response.status_code)
         return None
 
+
+def scrap_crm(url_target):
+
+    r = requests.get(url_target)
+    soup = BeautifulSoup(r.content, 'html.parser')
+    table = soup.find_all('table', { 'id': 'example' })
+    rows = table[0].find_all('tr')
+
+    print(rows)
+
+
+scrap_crm("https://datatables.net/")
 # EJEMPLOS DE USO
 #units_behaviour_report(base_url=MAPON_BASE_URL, key=MAPON_API_KEY, group_id=69153)
