@@ -4,9 +4,6 @@ PUENTES DE CONSUMO DE MAPON V1
 
 """
 import requests
-import json
-import asyncio
-import httpx
 from datetime import date, timedelta
 from config import MAPON_BASE_URL, MAPON_API_KEY, CRM_LOGIN_URL, COOKIES_SESSION_CRM
 from config import save_crm_cookies
