@@ -1,6 +1,6 @@
 import webview
 from flask import Flask, request, render_template
-from bridges import get_groups, units_behaviour_report
+from bridges import get_groups, units_behaviour_report, unit_general_info
 from utils import processString
 
 
@@ -39,9 +39,14 @@ def units_report_group():
 
 
 @app.route("/unit-general-info", methods=['GET'])
-def unit_general_info():
+def unit_general_info_view():
     # EXTRAER LOS ARGS GET
     unit_id = request.args.get("unit_id")
+    unit_info = unit_general_info(unit_id=unit_id)
+    print(unit_info)
+    # RENDERIZAR LA RESPUESTA
+    return render_template('pages/unit-general/unit_general.html', unit_info=unit_info)
+
 
 @app.route('/hello-world')
 def hello_world():

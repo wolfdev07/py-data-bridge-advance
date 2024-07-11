@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="container mt-5">
+
+    <div class="row mt-4">
+        <div class="col-6">
+            <h2>REPORTE DE UNIDAD</h2>
+        </div>
+        <div class="col-6 text-end">
+            <a href="{{ url_for('index') }}" class="btn btn-secondary">Regresar</a>
+        </div>
+    </div>
+
+    <div class="card mt-5">
+        <div class="card-body">
+            <div class="row justify-content-between">
+                <div class="col-6">
+                    <h5 class="card-title">{{ unit_info["unit_id"] }}</h5>
+                </div>
+                <div>
+                    <p>UNIDAD</p>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col-3">
+                    <button class="btn btn-primary" type="button">Consultar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -35,7 +35,7 @@
             <tbody>
                 {% for report in units_report %}
                     <tr>
-                        <td>{{ report.unit_id }}</td>
+                        <td><a href="/unit-general-info?unit_id={{ report.unit_id }}">{{ report.unit_id }}</a></td>
                         <td>{{ report.title }}</td>
                         <td>
                             <strong>Grade</strong> {{ report.overall['grade'] }} 
