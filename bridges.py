@@ -11,7 +11,7 @@ from datetime import date, timedelta
 from config import MAPON_BASE_URL, MAPON_API_KEY, CRM_LOGIN_URL, COOKIES_SESSION_CRM
 from config import save_crm_cookies
 from bs4 import BeautifulSoup
-from utils import login_crm
+from selenium_functions import login_crm
 
 
 
@@ -24,13 +24,11 @@ def get_groups(base_url=MAPON_BASE_URL, key=MAPON_API_KEY, unit_id=None):
         end_point = end_point + f"&unit_id={unit_id}"
     # EJECUTA LA PETICION, Y ALMACENA LA RESPUESTA EN LA VAR RESPONSE
     response = requests.get(end_point)
-
     # VERIFICA EL ESTADO DE LA RESPUESTA.
     if response.status_code == 200:
         # CONVIERTE LA RESPUESTA A JSON
         data = response.json()["data"]
         return data
-    
     else:
         print("Error:", response.status_code)
         return None
@@ -77,11 +75,25 @@ def units_behaviour_report(base_url=MAPON_BASE_URL, key=MAPON_API_KEY, date_from
                     "date_from": date_from,
                     "date_till": date_till,
                     "group_id": group_id}
-        
         return context
     else:
         print("Error:", response.status_code)
         return None
+
+
+
+# LISTA DE UNIDAD "unit/list.json"
+def unit_general_info(base_url=MAPON_BASE_URL, key=MAPON_API_KEY, unit_id=None):
+    # CONSTRUIR ENDPOINT
+    end_point = f"{base_url}unit/list.json?key={key}&unit_id={unit_id}"
+    # EJECUTAR LA PETICION Y ALMACENAR 
+    response = requests.get(end_point)
+
+    if response.status_code==200:
+        # CONVERTIR LA RESPUESTA EN JSON
+        unit = response.json()["data"]["units"][0]
+        return unit
+
 
 
 async def get_table_quicklink(url_target):
@@ -140,7 +152,7 @@ async def wait_for_table(doc_html):
 async def scrap_crm_async(url_target):
     await get_table_quicklink(url_target)
 
-asyncio.run(scrap_crm_async("https://mapon.com/partner/incoming_data/?box_model=QUECLINK&unique_id=862524060583388"))
+#asyncio.run(scrap_crm_async("https://mapon.com/partner/incoming_data/?box_model=QUECLINK&unique_id=862524060583388"))
 #scrap_crm("https://mapon.com/partner/incoming_data/?box_model=QUECLINK&unique_id=862524060583388")
 # EJEMPLOS DE USO
 #units_behaviour_report(base_url=MAPON_BASE_URL, key=MAPON_API_KEY, group_id=69153)

@@ -38,6 +38,11 @@ def units_report_group():
                             name_group=name_group )
 
 
+@app.route("/unit-general-info", methods=['GET'])
+def unit_general_info():
+    # EXTRAER LOS ARGS GET
+    unit_id = request.args.get("unit_id")
+
 @app.route('/hello-world')
 def hello_world():
     return 'Hello, World!'
