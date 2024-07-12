@@ -19,4 +19,3 @@ def save_crm_cookies(cookies):
         set_cookies = f"COOKIES_SESSION_CRM={cookies_json}\n"
         file.write(set_cookies)
     return set_cookies
-

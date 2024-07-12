@@ -5,6 +5,7 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
+from bs4 import BeautifulSoup
 
 
 def login_crm(url_target):
@@ -32,27 +33,24 @@ def auth_crm(url_target, cookies):
     for cookie in cookies:
         driver.add_cookie(cookie)
     driver.get(url_target)
-
     return driver
 
 # EXTRAER LA INFORMACION DE LA TABLA
 def get_data_table_crm(url_target, cookies):
     driver = auth_crm(url_target, cookies)
-    WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.CLASS_NAME, "data_table")))
-    table_element = driver.find_element_by_class_name("data_table")
-    # Get the table caption (if it exists)
-    caption_element = table_element.find_element(By.TAG_NAME, "caption")
-    if caption_element:
-        caption_text = caption_element.text
-    else:
-        caption_text = ""
-    # Extract the table data
-    table_data = []
-    for row in table_element.find_elements(By.TAG_NAME, "tr"):
-        row_data = []
-        for cell in row.find_elements(By.TAG_NAME, "td"):
-            row_data.append(cell.text)
-        table_data.append(row_data)
-    # Cerrar el controlador
-    driver.quit()
-    return table_data, caption_text
+    try:
+        # Esperar a que la tabla esté presente
+        WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.CLASS_NAME, "data_table")))
+        # Esperar a que la tabla tenga al menos un par de filas (indicativo de que los datos están cargados)
+        WebDriverWait(driver, 120).until(lambda d: len(d.find_elements(By.CSS_SELECTOR, ".data_table tr")) > 1)
+        # Esperar un poco más para asegurar que los datos están completamente cargados (ajusta según sea necesario)
+        WebDriverWait(driver, 10)
+        # Obtener el HTML de la página
+        doc_html = driver.page_source
+    finally:
+        # Cerrar el controlador
+        driver.quit()
+    # Analizar el HTML con BeautifulSoup
+    soup = BeautifulSoup(doc_html, "html.parser")
+    table_element = soup.find("table", {"class": "data_table"})
+    return table_element
