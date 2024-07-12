@@ -58,3 +58,18 @@ def cookies_manager(db, Model):
         db.session.commit()
 
     return cookies
+
+
+def cookies_converter(cookies_db):
+
+    # CONVERTIR EN DICT
+    cookies = {}
+    cookies["domain"] = cookies_db.domain
+    cookies["httpOnly"] = cookies_db.http_only
+    cookies["name"] = cookies_db.name
+    cookies["path"] = cookies_db.path
+    cookies["sameSite"] = cookies_db.same_site
+    cookies["secure"] = cookies_db.secure
+    cookies["value"] = cookies_db.value
+
+    return cookies

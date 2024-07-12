@@ -1,7 +1,9 @@
 from flask import render_template, request
 from models import Cookies
 from bridges import get_groups, units_behaviour_report, unit_general_info
-from utils import process_string_util, cookies_manager
+from utils import process_string_util, cookies_manager, cookies_converter
+from selenium_functions import get_data_table_crm
+from config import CRM_QUICKLINK_DATA
 
 
 def register_routes(app, db):
@@ -50,7 +52,10 @@ def register_routes(app, db):
     # RUTA DE PRUEBA
     @app.route('/cookies')
     def cookies():
-        cookies_manager(db, Cookies)
+        cookies_db = cookies_manager(db, Cookies)
+        cookies = cookies_converter(cookies_db)
+        print(cookies)
+        get_data_table_crm(CRM_QUICKLINK_DATA, cookies)
         return "Cookies Ok"
 
 
