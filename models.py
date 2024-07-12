@@ -14,5 +14,5 @@ class Cookies(db.Model):
     updated_at = db.Column(db.DateTime)
 
     def __repr__(self) -> str:
-        return f"Token INIT: {self.updatedAt}"
+        return f"Token INIT: {self.updated_at}"
     

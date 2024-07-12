@@ -1,7 +1,7 @@
 from flask import render_template, request
 from models import Cookies
 from bridges import get_groups, units_behaviour_report, unit_general_info
-from utils import processString
+from utils import process_string_util, cookies_manager
 
 
 def register_routes(app, db):
@@ -20,7 +20,7 @@ def register_routes(app, db):
         # EXTRAER LOS ARGS GET
         id_group = request.args.get('id_group')
         name_group = request.args.get('name_group')
-        name_group = processString(name_group)
+        name_group = process_string_util(name_group)
         # EN CASO DE QUERER FECHAS ESPECIFICAS
         if request.args.get('data_till') and request.args.get('data_from'):
             data_till=request.args.get('data_till')
@@ -45,6 +45,13 @@ def register_routes(app, db):
         print(unit_info)
         # RENDERIZAR LA RESPUESTA
         return render_template('pages/unit-general/unit_general.html', unit_info=unit_info)
+
+
+    # RUTA DE PRUEBA
+    @app.route('/cookies')
+    def cookies():
+        cookies_manager(db, Cookies)
+        return "Cookies Ok"
 
 
     @app.route('/hello-world')

@@ -6,7 +6,6 @@ from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from webdriver_manager.chrome import ChromeDriverManager
-from config import COOKIES_SESSION_CRM
 
 
 def login_crm(url_target):
@@ -24,7 +23,7 @@ def login_crm(url_target):
     return cookies
 
 
-def get_data_table(url_target):
+def get_data_table_crm(url_target, COOKIES_SESSION_CRM):
     # SETTEAR LAS COOKIES
     chrome_options = Options()
     cookies_data = json.loads(COOKIES_SESSION_CRM)
