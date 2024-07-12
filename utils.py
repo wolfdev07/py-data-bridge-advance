@@ -13,16 +13,20 @@ def process_string_util(string):
 
 def cookies_manager(db, Model):
 
-    cookies_exist = db.get_or_404(Model, 1)
+    try:
+        cookies_exist = db.session.get(Model, 1)
+    except Exception as e:
+        cookies_exist = None
+
     now = datetime.datetime.now()
 
     # HAY GALLETAS Y TODAVIA SIRVEN
-    if cookies_exist.updated_at and now - cookies_exist.updated_at < datetime.timedelta(hours=1):
+    if cookies_exist is not None and now - cookies_exist.updated_at < datetime.timedelta(hours=3):
         print(f"LAS GALLETAS SIRVEN!!!: {cookies_exist.updated_at} *******************")
         cookies = cookies_exist
 
     # HAY GALLETAS PERO YA NO SIRVEN, IR POR MÁS
-    elif cookies_exist.updated_at and now - cookies_exist.updated_at > datetime.timedelta(hours=1):
+    elif cookies_exist is not None and now - cookies_exist.updated_at > datetime.timedelta(hours=3):
         print("HAY GALLETAS PERO YA NO SIRVEN, IR POR MÁS")
         
         cookies_list = login_crm(CRM_LOGIN_URL)[0]
@@ -39,7 +43,7 @@ def cookies_manager(db, Model):
         print(f"SE ACTUALIZARON LAS GALLETAS CON EXITO: {cookies_exist.updated_at}")
 
     # NO HAY NI MADRES DE GALLETAS
-    elif not cookies_exist:
+    elif cookies_exist is None:
         print("LAS GALLETAS NO EXISTEN")
         cookies_list=login_crm(CRM_LOGIN_URL)[0]
         print(cookies_list)
