@@ -18,7 +18,7 @@ def cookies_manager(db, Model):
 
     # HAY GALLETAS Y TODAVIA SIRVEN
     if cookies_exist.updated_at and now - cookies_exist.updated_at < datetime.timedelta(hours=1):
-        print(f"LAS GALLETAS EXITEN: {cookies_exist.updated_at} *******************")
+        print(f"LAS GALLETAS SIRVEN!!!: {cookies_exist.updated_at} *******************")
         cookies = cookies_exist
 
     # HAY GALLETAS PERO YA NO SIRVEN, IR POR MÁS
@@ -72,4 +72,4 @@ def cookies_converter(cookies_db):
     cookies["secure"] = cookies_db.secure
     cookies["value"] = cookies_db.value
 
-    return cookies
+    return [cookies]

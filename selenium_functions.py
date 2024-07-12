@@ -21,30 +21,38 @@ def login_crm(url_target):
     driver.quit()
     return cookies
 
-
-def get_data_table_crm(url_target, cookies):
-    # LISTAR
-    cookies = [cookies]
-    # Configurar las opciones de Chrome
+# SETTEAR LAS COOKIES EN CHROME
+def auth_crm(url_target, cookies):
     chrome_options = Options()
-    # Iniciar el controlador de Chrome
     driver = webdriver.Chrome(options=chrome_options)
-    
-    # Abrir la página para establecer un contexto en el que las cookies puedan ser añadidas
     driver.get(url_target)
     # Eliminar todas las cookies
     driver.delete_all_cookies()
-
     # Añadir las cookies
     for cookie in cookies:
         driver.add_cookie(cookie)
-
-    # Recargar la página para que las cookies se apliquen
     driver.get(url_target)
-    
-    # Aquí puedes agregar el código para extraer la información que necesitas
-    # ...
-    WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.CLASS_NAME, "web_os")))
-    
+
+    return driver
+
+# EXTRAER LA INFORMACION DE LA TABLA
+def get_data_table_crm(url_target, cookies):
+    driver = auth_crm(url_target, cookies)
+    WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.CLASS_NAME, "data_table")))
+    table_element = driver.find_element_by_class_name("data_table")
+    # Get the table caption (if it exists)
+    caption_element = table_element.find_element(By.TAG_NAME, "caption")
+    if caption_element:
+        caption_text = caption_element.text
+    else:
+        caption_text = ""
+    # Extract the table data
+    table_data = []
+    for row in table_element.find_elements(By.TAG_NAME, "tr"):
+        row_data = []
+        for cell in row.find_elements(By.TAG_NAME, "td"):
+            row_data.append(cell.text)
+        table_data.append(row_data)
     # Cerrar el controlador
     driver.quit()
+    return table_data, caption_text

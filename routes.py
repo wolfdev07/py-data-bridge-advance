@@ -55,7 +55,9 @@ def register_routes(app, db):
         cookies_db = cookies_manager(db, Cookies)
         cookies = cookies_converter(cookies_db)
         print(cookies)
-        get_data_table_crm(CRM_QUICKLINK_DATA, cookies)
+        table_data, caption_text = get_data_table_crm(CRM_QUICKLINK_DATA, cookies)
+        print(table_data)
+        print(caption_text)
         return "Cookies Ok"
 
 
