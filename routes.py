@@ -33,10 +33,7 @@ def register_routes(app, db):
             # RENDERIZAR LA RESPUESTA
             units_report = report["data"]
             period = f"{report['date_from']} - {report['date_till']}"
-        return render_template('pages/units-list-group/units-report-group.html', 
-                                period=period, 
-                                units_report=units_report, 
-                                name_group=name_group )
+        return render_template('pages/units-list-group/units-report-group.html', period=period, units_report=units_report, name_group=name_group )
 
 
     @app.route("/unit-general-info", methods=['GET'])
