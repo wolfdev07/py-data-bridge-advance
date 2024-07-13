@@ -1,3 +1,4 @@
+import os
 import datetime
 from selenium_functions import login_crm
 from config import CRM_LOGIN_URL
@@ -77,3 +78,14 @@ def cookies_converter(cookies_db):
     cookies["value"] = cookies_db.value
 
     return [cookies]
+
+
+
+def html_table_constructor(table_element):
+    # Convertir el elemento BeautifulSoup a una cadena HTML
+    table_html = str(table_element)
+    # Definir la ruta
+    template_path = os.path.join('templates', 'pages', 'crm-manager', 'components', 'table.html')
+    # Guardar la tabla en un archivo HTML
+    with open(template_path, 'w', encoding='utf-8') as file:
+        file.write(table_html)

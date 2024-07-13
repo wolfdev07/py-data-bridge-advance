@@ -6,5 +6,5 @@ newcrmButton.addEventListener("click", ()=>{
     // EJECUTAR ANIMACION DE CARGA
     LoadingPage();
     // REDIRECCIONAR AL FORMULARIO
-    window.location.href="/cookies";
+    window.location.href="/crm-manager";
 });

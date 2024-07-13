@@ -1,7 +1,7 @@
 from flask import render_template, request
 from models import Cookies
 from bridges import get_groups, units_behaviour_report, unit_general_info
-from utils import process_string_util, cookies_manager, cookies_converter
+from utils import process_string_util, cookies_manager, cookies_converter, html_table_constructor
 from selenium_functions import get_data_table_crm
 from config import CRM_QUICKLINK_DATA
 
@@ -44,6 +44,22 @@ def register_routes(app, db):
         print(unit_info)
         # RENDERIZAR LA RESPUESTA
         return render_template('pages/unit-general/unit_general.html', unit_info=unit_info)
+
+    @app.route('/crm-manager', methods=['GET'])
+    def crm_manager_main():
+        #OBTENER LOS DATOS DE AUTH
+        cookies = cookies_manager(db, Cookies)
+        data_authetication = cookies_converter(cookies)
+        #OBTENER LOS DATOS DE LA TABLA
+        table_element = get_data_table_crm(CRM_QUICKLINK_DATA, data_authetication)
+        # Convertir el elemento BeautifulSoup a una cadena HTML
+        html_table_constructor(table_element)
+        # RENDERIZAR LA RESPUESTA
+        return render_template('pages/crm-manager/crm_manager_main.html')
+
+    @app.route('/crm-manager-config', methods=['GET'])
+    def crm_manager_config():
+        return render_template('pages/crm-manager/crm_manager_main.html')
 
 
     # RUTA DE PRUEBA
