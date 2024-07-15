@@ -339,5 +339,5 @@ bower_components
 psd
 thumb
 sketch
-
 # End of https://www.toptal.com/developers/gitignore/api/angular,react
+templates/pages/crm-manager/components/table.html
