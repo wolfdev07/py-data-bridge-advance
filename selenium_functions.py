@@ -17,10 +17,10 @@ def login_crm(url_target):
         WebDriverWait(driver, 120).until(EC.presence_of_element_located((By.CLASS_NAME, "mp-dropdown-header")))
     except:
         print("Error al cargar la página")
-    cookies = driver.get_cookies()
+    web_cookies = driver.get_cookies()
     # CERRAR EL NAVEGADOR
     driver.quit()
-    return cookies
+    return web_cookies
 
 # SETTEAR LAS COOKIES EN CHROME
 def auth_crm(url_target, cookies):
