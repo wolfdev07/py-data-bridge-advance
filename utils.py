@@ -3,8 +3,7 @@ import datetime
 from selenium_functions import login_crm
 from config import CRM_LOGIN_URL
 
-
-cookies = {"domain": "mapon.com", "httpOnly": True, "name": "PHPSESSID", "path": "/", "sameSite": "Lax", "secure": True, "value": "bddef210e347b5c976db9a895edf894c"}
+now = datetime.datetime.now()
 
 def process_string_util(string):
     process_string = string.replace("_", " ")
@@ -12,23 +11,32 @@ def process_string_util(string):
     return process_string
 
 
-def cookies_manager(db, Model):
-
+def expiration_cookies(data_base, Model):
     try:
-        cookies_exist = db.session.get(Model, 1)
+        cookies = data_base.session.get(Model, 1)
     except Exception as e:
-        cookies_exist = None
+        print(e)
+        cookies = None
+    if cookies is not None and now - cookies.updated_at < datetime.timedelta(hours=3):
+        return cookies, f"LAS GALLETAS SIRVEN!!!: {cookies.updated_at} *******************", True
+    elif cookies is not None and now - cookies.updated_at > datetime.timedelta(hours=3):
+        return cookies, "HAY GALLETAS PERO YA NO SIRVEN, IR POR MÁS", False
+    elif cookies is None:
+        return cookies, "LAS GALLETAS NO EXISTEN", None
 
-    now = datetime.datetime.now()
+
+def cookies_manager(data_base, Model):
+
+    cookies_exist, cookies_string, bool_cookies = expiration_cookies(data_base, Model)
 
     # HAY GALLETAS Y TODAVIA SIRVEN
     if cookies_exist is not None and now - cookies_exist.updated_at < datetime.timedelta(hours=3):
-        print(f"LAS GALLETAS SIRVEN!!!: {cookies_exist.updated_at} *******************")
+        print(cookies_string)
         cookies = cookies_exist
 
     # HAY GALLETAS PERO YA NO SIRVEN, IR POR MÁS
     elif cookies_exist is not None and now - cookies_exist.updated_at > datetime.timedelta(hours=3):
-        print("HAY GALLETAS PERO YA NO SIRVEN, IR POR MÁS")
+        print(cookies_string)
         
         cookies_list = login_crm(CRM_LOGIN_URL)[0]
         cookies_exist.domain = cookies_list["domain"]
@@ -39,13 +47,13 @@ def cookies_manager(db, Model):
         cookies_exist.secure = cookies_list["secure"]
         cookies_exist.value = cookies_list["value"]
         cookies_exist.updated_at = now
-        db.session.commit()
-        cookies = db.get_or_404(Model, 1)
+        data_base.session.commit()
+        cookies = data_base.session.get(Model, 1)
         print(f"SE ACTUALIZARON LAS GALLETAS CON EXITO: {cookies_exist.updated_at}")
 
     # NO HAY NI MADRES DE GALLETAS
     elif cookies_exist is None:
-        print("LAS GALLETAS NO EXISTEN")
+        print(cookies_string)
         cookies_list=login_crm(CRM_LOGIN_URL)[0]
         print(cookies_list)
         cookies = Model(
@@ -59,8 +67,8 @@ def cookies_manager(db, Model):
                         value=cookies_list["value"],
                         updated_at=datetime.datetime.now()
                         )
-        db.session.add(cookies)
-        db.session.commit()
+        data_base.session.add(cookies)
+        data_base.session.commit()
 
     return cookies
 
