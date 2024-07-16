@@ -1,7 +1,7 @@
-from flask import render_template, request
+from flask import render_template, request, jsonify
 from models import Cookies
 from bridges import get_groups, units_behaviour_report, unit_general_info
-from utils import process_string_util, cookies_manager, cookies_converter, html_table_constructor
+from utils import process_string_util, cookies_manager, cookies_converter, html_table_constructor, expiration_cookies
 from selenium_functions import get_data_table_crm
 from config import CRM_QUICKLINK_DATA
 
@@ -65,12 +65,11 @@ def register_routes(app, db):
     # RUTA DE PRUEBA
     @app.route('/cookies')
     def cookies():
-        cookies_db = cookies_manager(db, Cookies)
-        cookies = cookies_converter(cookies_db)
-        print(cookies)
-        table_element = get_data_table_crm(CRM_QUICKLINK_DATA, cookies)
-        print(f"##### TABLA HTML: {table_element}")
-        return "Cookies Ok"
+        cookies, string_cookies, bool_cookies = expiration_cookies(db, Cookies)
+        return jsonify({
+            "info": string_cookies,
+            "expiration": bool_cookies
+        })
 
 
     @app.route('/hello-world')
